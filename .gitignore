@@ -1,2 +1,5 @@
 venv
 static/wallets.json
+.DS_store
+__pycache__/
+*.pyc

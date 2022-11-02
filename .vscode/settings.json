@@ -1,0 +1,7 @@
+{
+  "files.exclude": {
+    "requirements.txt": true,
+    "venv": true,
+    "static/wallets-sample.json": true,
+  }
+}
