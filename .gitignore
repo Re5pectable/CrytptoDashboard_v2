@@ -2,4 +2,6 @@ venv
 static/wallets.json
 .DS_store
 __pycache__/
+__pycache__
 *.pyc
+.vscode
