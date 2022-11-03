@@ -40,9 +40,9 @@ class Swapper(Network):
             "data": "".join(data),
         }
         signed_trx = createRawTransaction(txn, self.my_key)
-        print(f"==== swapExactETHForTokens READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== swapExactETHForTokens READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_sendRawTransaction(signed_trx)
-        print(f"==== swapExactETHForTokens FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== swapExactETHForTokens FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return res
 
     
@@ -75,9 +75,9 @@ class Swapper(Network):
             "data": "".join(data),
         }
         signed_trx = createRawTransaction(txn, self.my_key)
-        print(f"==== swapExactTokensForETH READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== swapExactTokensForETH READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_sendRawTransaction(signed_trx)
-        print(f"==== swapExactTokensForETH FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== swapExactTokensForETH FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return res
 
 
@@ -110,9 +110,9 @@ class Swapper(Network):
             "data": "".join(data),
         }
         signed_trx = createRawTransaction(txn, self.my_key)
-        print(f"==== swapExactTokensForETH READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== swapExactTokensForETH READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_sendRawTransaction(signed_trx)
-        print(f"==== swapExactTokensForETH FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== swapExactTokensForETH FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return res
 
 
@@ -133,9 +133,9 @@ class Swapper(Network):
             "data": "".join(data)
         }
         signed_trx = createRawTransaction(txn, self.my_key)
-        print(f"==== approve READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== approve READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_sendRawTransaction(signed_trx)
-        print(f"==== approve FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== approve FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return res
 
 
@@ -155,9 +155,9 @@ class Swapper(Network):
             },
             "latest"
         ]
-        print(f"==== getAmountsOut READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== getAmountsOut READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        print(f"==== getAmountsOut FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== getAmountsOut FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return int(res['result'][-64:], 16)
 
 
@@ -177,9 +177,9 @@ class Swapper(Network):
             },
             "latest"
         ]
-        print(f"==== getRawAmountsIn READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== getRawAmountsIn READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        print(f"==== getRawAmountsIn FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== getRawAmountsIn FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return int(res['result'][-64:], 16)
         
 
@@ -198,9 +198,9 @@ class Factory(Network):
             "to": self.factory_contract,
             "data": data
         }, "latest"]
-        print(f"==== getAllPairsLength READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== getAllPairsLength READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        print(f"==== getAllPairsLength FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== getAllPairsLength FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return int(res['result'], 0)
 
     async def getContractOfPair(self, id: int) -> str:
@@ -211,9 +211,9 @@ class Factory(Network):
             "to": self.factory_contract,
             "data": data
         }, "latest"]
-        print(f"==== allPairs READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== allPairs READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        print(f"==== allPairs FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== allPairs FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return "0x" + res['result'][-40:]
 
     async def getInPairContractToken0(self, pair_contract) -> str:
@@ -224,9 +224,9 @@ class Factory(Network):
             "to": pair_contract,
             "data": data
         }, "latest"]
-        print(f"==== token0 READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== token0 READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        print(f"==== token0 FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== token0 FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return "0x" + res['result'][-40:]
 
 
@@ -238,9 +238,9 @@ class Factory(Network):
             "to": pair_contract,
             "data": data
         }, "latest"]
-        print(f"==== token1 READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== token1 READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        print(f"==== token1 FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== token1 FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return "0x" + res['result'][-40:]
 
     async def getReserves(self, pair_contract):
@@ -251,7 +251,7 @@ class Factory(Network):
             "to": pair_contract,
             "data": data
         }, "latest"]
-        print(f"==== getReserves READY TO SEND     {round(time.time() - s, 3)} s.")
+        # print(f"==== getReserves READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        print(f"==== getReserves FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
+        # print(f"==== getReserves FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return int(res['result'][2:][:64], 16), int(res['result'][2:][64:128], 16)

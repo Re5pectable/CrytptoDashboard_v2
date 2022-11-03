@@ -1,4 +1,5 @@
 {
     "router_contract": "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    "factory_contract": "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73",
     "net_url": "https://bsc-dataseed1.binance.org/"
 }

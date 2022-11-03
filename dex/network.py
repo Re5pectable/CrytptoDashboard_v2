@@ -89,4 +89,14 @@ class Network:
             "data": "0x95d89b41", # symbol()
         }, 'latest']
         res = await self._eth_call(params)
-        return bytes.fromhex(res['result'][-64:]).decode('utf-8')
+        return bytes.fromhex(res['result'][-64:]).decode('utf-8').rstrip('\x00')
+    
+
+    async def getDecimals(self, contract: str):
+        params = [{
+            "to": contract,
+            "from": "0x0000000000000000000000000000000000000000",
+            "data": "0x313ce567", # symbol()
+        }, 'latest']
+        res = await self._eth_call(params)
+        return int(res['result'], 0)
