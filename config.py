@@ -5,7 +5,7 @@ import json
 from cex.binance_client import BinanceClient
 
 
-APP_PATH = sys.path[1] 
+APP_PATH = sys.path[0] 
 wallets = json.load(open(APP_PATH + "/static/wallets.json"))
 
 

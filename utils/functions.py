@@ -26,3 +26,12 @@ def to64Symbols(value: str, n=64):
 
 def decodeResponse(httpResponse):
     return json.loads(httpResponse.content.decode())
+
+
+async def get_abi(contract: str):
+    link = f"https://api.bscscan.com/api?module=contract&action=getabi&address={contract}"
+    res = await web2_client.get(link)
+    try:
+        return json.loads(res.json()['result'])
+    except json.decoder.JSONDecodeError:
+        return None

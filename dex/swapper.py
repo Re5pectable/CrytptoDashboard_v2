@@ -2,6 +2,20 @@ from web3 import Web3
 import time
 from utils.functions import toChecksumAddress, to64Symbols, createRawTransaction
 from dex.network import Network
+from pydantic import BaseModel
+from typing import Optional
+
+
+class SwapDetails(BaseModel):
+    ETH_amount: Optional[float] = None
+    token_amountIn: Optional[int] = None
+    amountOutMin: int = 0
+    path: list = None
+    deadline: int = None
+    gas: int = None
+    gasPrice: int = None
+    nonce: int = None
+
 
 class Swapper(Network):
     def __init__(self,
@@ -13,15 +27,15 @@ class Swapper(Network):
     
     async def swapExactETHForTokens(
         self,
-        ETH_amount: float = 0,
-        amountOutMin: int = 0,
-        path: list = None,
-        deadline: int = None,
-        gas: int = None,
-        gasPrice: int = None,
-        nonce: int = None,
+        ETH_amount: float,
+        amountOutMin: int,
+        path: list,
+        deadline: int,
+        gasLimit: int,
+        gasPrice: int,
+        nonce: int,
+        **kwargs
         ):
-        s = time.time()
         data = [
              "0x7ff36ab5",
              to64Symbols(hex(amountOutMin)),
@@ -34,27 +48,51 @@ class Swapper(Network):
             "to": self.router_contract,
             "from": self.my_address,
             "value": Web3.toWei(ETH_amount, 'ether'),
-            "gas": gas,
+            "gas": gasLimit,
             "gasPrice": Web3.toWei(gasPrice, 'gwei'),
             "nonce": nonce,
             "data": "".join(data),
         }
         signed_trx = createRawTransaction(txn, self.my_key)
-        # print(f"==== swapExactETHForTokens READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_sendRawTransaction(signed_trx)
-        # print(f"==== swapExactETHForTokens FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return res
 
     
+    async def test_swapExactETHForTokens(
+        self,
+        ETH_amount: float,
+        amountOutMin: int,
+        path: list,
+        deadline: int,
+        **kwargs):
+        data = [
+             "0x7ff36ab5",
+             to64Symbols(hex(amountOutMin)),
+             to64Symbols("80"),
+             to64Symbols(self.my_address),
+             to64Symbols(hex(deadline)),
+             to64Symbols(str(len(path)))
+        ] + [to64Symbols(address) for address in path]
+        txn = {
+                "to": self.router_contract,
+                "from": self.my_address,
+                "value": hex(Web3.toWei(ETH_amount, 'ether')),
+                "data": "".join(data),
+            }
+        res = await self._eth_estimateGas([txn])
+        return res
+
+
     async def swapExactTokensForETH(
         self,
         token_amountIn: int,
         amountOutMin: int,
         path: list,
         deadline: int,
-        gas: int,
+        gasLimit: int,
         gasPrice: int,
-        nonce: int):
+        nonce: int,
+        **kwargs):
         s = time.time()
         data = [
              "0x18cbafe5",
@@ -69,17 +107,39 @@ class Swapper(Network):
             "to": self.router_contract,
             "from": self.my_address,
             "value": 0,
-            "gas": gas,
+            "gas": gasLimit,
             "gasPrice": Web3.toWei(gasPrice, 'gwei'),
             "nonce": nonce,
             "data": "".join(data),
         }
         signed_trx = createRawTransaction(txn, self.my_key)
-        # print(f"==== swapExactTokensForETH READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_sendRawTransaction(signed_trx)
-        # print(f"==== swapExactTokensForETH FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return res
 
+    async def test_swapExactTokensForETH(
+        self,
+        token_amountIn: int,
+        amountOutMin: int,
+        path: list,
+        deadline: int,
+        **kwargs):
+        data = [
+             "0x18cbafe5",
+             to64Symbols(hex(token_amountIn)),
+             to64Symbols(hex(amountOutMin)),
+             to64Symbols("a0"),
+             to64Symbols(self.my_address),
+             to64Symbols(hex(deadline)),
+             to64Symbols(str(len(path)))
+        ] + [to64Symbols(address) for address in path]
+        txn = {
+                "to": self.router_contract,
+                "from": self.my_address,
+                "value": hex(0),
+                "data": "".join(data),
+            }
+        res = await self._eth_estimateGas([txn])
+        return res
 
     async def swapExactTokensForTokens(
         self,
@@ -87,10 +147,10 @@ class Swapper(Network):
         amountOutMin: int,
         path: list,
         deadline: int,
-        gas: int,
+        gasLimit: int,
         gasPrice: int,
-        nonce: int):
-        s = time.time()
+        nonce: int,
+        **kwargs):
         data = [
              "0x38ed1739",
              to64Symbols(hex(token_amountIn)),
@@ -104,20 +164,51 @@ class Swapper(Network):
             "to": self.router_contract,
             "from": self.my_address,
             "value": 0,
-            "gas": gas,
+            "gas": gasLimit,
             "gasPrice": Web3.toWei(gasPrice, 'gwei'),
             "nonce": nonce,
             "data": "".join(data),
         }
         signed_trx = createRawTransaction(txn, self.my_key)
-        # print(f"==== swapExactTokensForETH READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_sendRawTransaction(signed_trx)
-        # print(f"==== swapExactTokensForETH FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return res
 
 
-    async def approve(self, token_address: str, amount, gas: int, gasPrice: int, nonce: int):
-        s = time.time()
+    async def test_swapExactTokensForTokens(
+        self,
+        token_amountIn: int,
+        amountOutMin: int,
+        path: list,
+        deadline: int,
+        **kwargs):
+        data = [
+             "0x38ed1739",
+             to64Symbols(hex(token_amountIn)),
+             to64Symbols(hex(amountOutMin)),
+             to64Symbols("a0"),
+             to64Symbols(self.my_address),
+             to64Symbols(hex(deadline)),
+             to64Symbols(str(len(path)))
+        ] + [to64Symbols(address) for address in path]
+        txn = {
+                "to": self.router_contract,
+                "from": self.my_address,
+                "value": hex(0),
+                "data": "".join(data),
+            }
+        res = await self._eth_estimateGas([txn])
+        return res
+
+
+    async def approve(
+        self,
+        token_address: str,
+        amount: int,
+        gasLimit: int,
+        gasPrice: int,
+        nonce: int,
+        **kwargs):
+
         data = [
             "0x095ea7b3",
             to64Symbols(self.router_contract),
@@ -127,20 +218,17 @@ class Swapper(Network):
             "to": token_address,
             "from": self.my_address,
             "value": 0,
-            "gas": gas,
+            "gas": gasLimit,
             "gasPrice": Web3.toWei(gasPrice, 'gwei'),
             "nonce": nonce,
             "data": "".join(data)
         }
         signed_trx = createRawTransaction(txn, self.my_key)
-        # print(f"==== approve READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_sendRawTransaction(signed_trx)
-        # print(f"==== approve FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return res
 
 
     async def getRawAmountsOut(self, amountsIn: int, path: list):
-        s = time.time()
         data = [
              "0xd06ca61f",
              to64Symbols(hex(amountsIn)),
@@ -155,14 +243,11 @@ class Swapper(Network):
             },
             "latest"
         ]
-        # print(f"==== getAmountsOut READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        # print(f"==== getAmountsOut FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return int(res['result'][-64:], 16)
 
 
     async def getRawAmountsIn(self, amountsOut: int, path: list):
-        s = time.time()
         data = [
              "0x1f00ca74",
              to64Symbols(hex(amountsOut)),
@@ -177,9 +262,7 @@ class Swapper(Network):
             },
             "latest"
         ]
-        # print(f"==== getRawAmountsIn READY TO SEND     {round(time.time() - s, 3)} s.")
         res = await self._eth_call(params)
-        # print(f"==== getRawAmountsIn FINISHED IN TOTAL {round(time.time() - s, 3)} s.")
         return int(res['result'][-64:], 16)
         
 

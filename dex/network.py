@@ -39,6 +39,18 @@ class Network:
         return decodeResponse(res)
 
 
+    async def _eth_estimateGas(self, params: list, _id=1):
+        payload = {
+            "jsonrpc": "2.0",
+            "method": "eth_estimateGas",
+            "params": params,
+            "id": _id
+        }
+        print(payload)
+        res = await web2_client.post(self.net_url, headers=eth_headers, data=json.dumps(payload))
+        return decodeResponse(res)
+
+
     async def getNonce(self, address: str, _id=1):
         payload = {
             "jsonrpc": "2.0",
